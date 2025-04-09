@@ -1,0 +1,38 @@
+## Summary 摘要
+
+- React always recursively renders components by default, so when a parent renders, its children will render
+- React 默认总是递归渲染组件，因此当父组件渲染时，其子组件也会渲染
+- Rendering by itself is fine - it's how React knows what DOM changes are needed
+- 渲染本身就很好——React 通过它知道需要进行哪些 DOM 更改
+- But, rendering takes time, and "wasted renders" where the UI output didn't change can add up
+- 但是，渲染需要时间，并且 UI 输出没有改变的“浪费渲染”可能会累积起来
+- It's okay to pass down new references like callback functions and objects most of the time
+- 大多数情况下，传递回调函数和对象等新引用是可以的
+- APIs like React.memo() can skip unnecessary renders if props haven't changed
+- 如果 props 没有改变，像 React.memo() 这样的 API 可以跳过不必要的渲染
+- But if you always pass new references down as props, React.memo() can never skip a render, so you may need to memoize those values
+- 但是如果你总是将新的引用作为 props 传递， React.memo() 就永远不会跳过渲染，所以你可能需要记住这些值
+- Context makes values accessible to any deeply nested component that is interested
+- 上下文使任何感兴趣的深层嵌套组件都可以访问值
+- Context providers compare their value by reference to know if it's changed
+- 上下文提供者通过引用比较它们的值来了解它是否发生了变化
+- A new context values does force all nested consumers to re-render
+- 新的上下文值确实会强制所有嵌套消费者重新渲染
+- But, many times the child would have re-rendered anyway due to the normal parent->child render cascade process
+- 但是，由于正常的父子渲染级联过程，很多时候子组件都会重新渲染
+- So you probably want to wrap the child of a context provider in React.memo(), or use {props.children}, so that the whole tree doesn't render all the time when + you update the context value
+- 因此，您可能希望将上下文提供程序的子项包装在 React.memo() 中，或者使用 {props.children} ，以便在更新上下文值时整个树不会一直渲染
+- When a child component is rendered based on a new context value, React keeps cascading renders down from there too
+- 当子组件根据新的上下文值进行渲染时，React 也会继续从那里向下进行级联渲染
+- React-Redux uses subscriptions to the Redux store to check for updates, instead of passing store state values by context
+- React-Redux 使用对 Redux 存储的订阅来检查更新，而不是通过上下文传递存储状态值
+- Those subscriptions run on every Redux store update, so they need to be as fast as possible
+- 这些订阅在每次 Redux Store 更新时运行，因此它们需要尽可能快
+- React-Redux does a lot of work to ensure that only components whose data changed are forced to re-render
+- React-Redux 做了很多工作来确保只有数据发生变化的组件才会被强制重新渲染
+- connect acts like React.memo(), so having lots of connected components can minimize the total number of components that render at a time
+- connect 作用类似于 React.memo() ，因此拥有大量连接的组件可以最大限度地减少一次渲染的组件总数
+- useSelector is a hook, so it can't stop renders caused by parent components. An app that only has useSelector everywhere should probably add React.memo() to + some components to help avoid renders from cascading all the time.
+- useSelector 是一个钩子，因此它无法阻止由父组件引起的渲染。如果一个应用只在所有组件中使用 useSelector ，那么应该在某些组件中添加 React.memo() ，以避免渲染一直处于级联状态。
+- The "React Forget" auto-memoizing compiler may drastically simplify all this if it does get released.
+- 如果“React Forget”自动记忆编译器确实发布，它可能会大大简化这一切。
